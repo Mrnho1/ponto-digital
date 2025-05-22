@@ -9,4 +9,5 @@ public class FuncionarioOutputDTO {
     private String cpf;
     private String email;
     private String telefone;
+    private JornadaTrabalhoDTO jornadaTrabalho;
 }

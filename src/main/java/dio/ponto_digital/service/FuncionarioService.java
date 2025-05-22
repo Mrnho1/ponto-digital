@@ -2,21 +2,20 @@ package dio.ponto_digital.service;
 
 import dio.ponto_digital.dto.FuncionarioInputDTO;
 import dio.ponto_digital.dto.FuncionarioOutputDTO;
+import dio.ponto_digital.dto.JornadaTrabalhoDTO;
 import dio.ponto_digital.model.Funcionario;
+import dio.ponto_digital.model.JornadaTrabalho;
 import dio.ponto_digital.repository.FuncionarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class FuncionarioService {
 
-    private final FuncionarioRepository repository;
-
-    public FuncionarioService(FuncionarioRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
 
     public FuncionarioOutputDTO salvar(FuncionarioInputDTO dto) {
         Funcionario funcionario = new Funcionario();
@@ -25,15 +24,16 @@ public class FuncionarioService {
         funcionario.setEmail(dto.getEmail());
         funcionario.setTelefone(dto.getTelefone());
 
-        funcionario = repository.save(funcionario);
+        Funcionario salvo = funcionarioRepository.save(funcionario);
 
-        return toOutputDTO(funcionario);
+        return toOutputDTO(salvo);
     }
 
-    public List<FuncionarioOutputDTO> listarTodos() {
-        return repository.findAll().stream()
-                .map(this::toOutputDTO)
-                .collect(Collectors.toList());
+    public FuncionarioOutputDTO buscarPorId(Long id) {
+        Funcionario funcionario = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+
+        return toOutputDTO(funcionario);
     }
 
     private FuncionarioOutputDTO toOutputDTO(Funcionario funcionario) {
@@ -43,6 +43,17 @@ public class FuncionarioService {
         dto.setCpf(funcionario.getCpf());
         dto.setEmail(funcionario.getEmail());
         dto.setTelefone(funcionario.getTelefone());
+
+        JornadaTrabalho jornada = funcionario.getJornadaTrabalho();
+        if (jornada != null) {
+            JornadaTrabalhoDTO jornadaDTO = new JornadaTrabalhoDTO();
+            jornadaDTO.setId(jornada.getId());
+            jornadaDTO.setHoraEntrada(jornada.getHoraEntrada());
+            jornadaDTO.setHoraSaida(jornada.getHoraSaida());
+            jornadaDTO.setIntervalo(jornada.getIntervalo());
+            dto.setJornadaTrabalho(jornadaDTO);
+        }
+
         return dto;
     }
 }

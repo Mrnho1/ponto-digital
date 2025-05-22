@@ -4,10 +4,7 @@ import dio.ponto_digital.dto.JornadaTrabalhoInputDTO;
 import dio.ponto_digital.dto.JornadaTrabalhoOutputDTO;
 import dio.ponto_digital.service.JornadaTrabalhoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/jornadas")
@@ -20,5 +17,4 @@ public class JornadaTrabalhoController {
     public JornadaTrabalhoOutputDTO criar(@RequestBody JornadaTrabalhoInputDTO dto) {
         return jornadaService.salvar(dto);
     }
-
 }

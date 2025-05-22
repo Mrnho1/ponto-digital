@@ -2,6 +2,7 @@ package dio.ponto_digital.service;
 
 import dio.ponto_digital.dto.JornadaTrabalhoInputDTO;
 import dio.ponto_digital.dto.JornadaTrabalhoOutputDTO;
+import dio.ponto_digital.dto.FuncionarioDTO;
 import dio.ponto_digital.model.Funcionario;
 import dio.ponto_digital.model.JornadaTrabalho;
 import dio.ponto_digital.repository.FuncionarioRepository;
@@ -28,17 +29,27 @@ public class JornadaTrabalhoService {
         jornada.setHoraSaida(dto.getHoraSaida());
         jornada.setIntervalo(dto.getIntervalo());
 
+        // Sincroniza o lado do Funcionario para evitar inconsistências
+        funcionario.setJornadaTrabalho(jornada);
+
         JornadaTrabalho salvo = jornadaRepository.save(jornada);
 
         JornadaTrabalhoOutputDTO output = new JornadaTrabalhoOutputDTO();
         output.setId(salvo.getId());
-        output.setFuncionarioId(funcionario.getId());
         output.setHoraEntrada(salvo.getHoraEntrada());
         output.setHoraSaida(salvo.getHoraSaida());
         output.setIntervalo(salvo.getIntervalo());
 
+        // Mapeia Funcionario para DTO
+        FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
+        funcionarioDTO.setId(funcionario.getId());
+        funcionarioDTO.setNome(funcionario.getNome());
+        funcionarioDTO.setCpf(funcionario.getCpf());
+        funcionarioDTO.setEmail(funcionario.getEmail());
+        funcionarioDTO.setTelefone(funcionario.getTelefone());
+
+        output.setFuncionario(funcionarioDTO);
+
         return output;
     }
-
-
 }

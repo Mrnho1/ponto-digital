@@ -1,9 +1,7 @@
 package dio.ponto_digital.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -18,4 +16,9 @@ public class Funcionario {
     private String cpf;
     private String email;
     private String telefone;
+
+    @OneToOne(mappedBy = "funcionario", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private JornadaTrabalho jornadaTrabalho;
+
 }

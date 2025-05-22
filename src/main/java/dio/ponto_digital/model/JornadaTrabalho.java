@@ -1,5 +1,6 @@
 package dio.ponto_digital.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,11 +14,12 @@ public class JornadaTrabalho {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "funcionario_id", nullable = false, unique = true)
-    private Funcionario funcionario;
-
     private LocalTime horaEntrada;
     private LocalTime horaSaida;
     private LocalTime intervalo;
+
+    @OneToOne
+    @JoinColumn(name = "funcionario_id")
+    @JsonBackReference
+    private Funcionario funcionario;
 }
