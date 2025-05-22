@@ -1,5 +1,6 @@
 package dio.ponto_digital.service;
 
+import dio.ponto_digital.dto.FuncionarioDTO;
 import dio.ponto_digital.dto.FuncionarioInputDTO;
 import dio.ponto_digital.dto.FuncionarioOutputDTO;
 import dio.ponto_digital.dto.JornadaTrabalhoDTO;
@@ -9,7 +10,8 @@ import dio.ponto_digital.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FuncionarioService {
@@ -55,5 +57,19 @@ public class FuncionarioService {
         }
 
         return dto;
+    }
+    public List<FuncionarioDTO> listarTodos() {
+        return funcionarioRepository.findAll()
+                .stream()
+                .map(funcionario -> {
+                    FuncionarioDTO dto = new FuncionarioDTO();
+                    dto.setId(funcionario.getId());
+                    dto.setNome(funcionario.getNome());
+                    dto.setCpf(funcionario.getCpf());
+                    dto.setEmail(funcionario.getEmail());
+                    dto.setTelefone(funcionario.getTelefone());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }
