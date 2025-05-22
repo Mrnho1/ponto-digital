@@ -40,5 +40,5 @@ public class JornadaTrabalhoService {
         return output;
     }
 
-    // métodos adicionais como buscar, excluir, etc. podem ser adicionados aqui
+
 }
